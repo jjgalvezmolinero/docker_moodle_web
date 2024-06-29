@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  django:
+    image: python:3.9
+    container_name: moodle-django
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    command: sh -c "pip install django && if [ ! -f manage.py ]; then django-admin startproject moodle_docker_manager .; fi && pip install -r requirements.txt && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=example
+      - MYSQL_DATABASE=mydatabase
+
+  react:
+    image: node:14
+    container_name: moodle-react
+    volumes:
+      - ./frontend:/app
+    working_dir: /app
+    command: sh -c "test -f package.json || npx create-react-app . && npm start"
+    ports:
+      - "3000:3000"
+
+  db:
+    image: mysql:8
+    container_name: moodle-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: mydatabase
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
