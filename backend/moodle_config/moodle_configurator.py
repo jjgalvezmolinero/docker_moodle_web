@@ -40,3 +40,13 @@ def get_moodle_config(name):
         return {'status': 'success', 'configuracion': configuracion}
     except Exception as e:
         return {'status': 'error', 'message': f'Error al obtener configuracion: {e}'}
+    
+def delete_moodle_config(name):
+    try:
+        mongo_handler = MBD.MongoHandler()
+        mongo_handler.conectar()
+        mongo_handler.eliminar_documento('ens', {'COMPOSE_PROJECT_NAME': name})
+        mongo_handler.cerrar_conexion()
+        return {'status': 'success', 'message': 'Configuracion eliminada exitosamente'}
+    except Exception as e:
+        return {'status': 'error', 'message': f'Error al eliminar configuracion: {e}'}

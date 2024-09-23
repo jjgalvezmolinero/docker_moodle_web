@@ -18,3 +18,8 @@ def list():
 def get(name):
     response = MC.get_moodle_config(name)
     return jsonify(response)
+
+@moodle_config.route('/delete/<name>', methods=['DELETE'])
+def delete(name):
+    response = MC.delete_moodle_config(name)
+    return jsonify(response)
