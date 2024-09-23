@@ -30,3 +30,13 @@ def listar_configuraciones():
         return {'status': 'success', 'configuraciones': configuraciones}
     except Exception as e:
         return {'status': 'error', 'message': f'Error al listar configuraciones: {e}'}
+
+def get_moodle_config(name):
+    try:
+        mongo_handler = MBD.MongoHandler()
+        mongo_handler.conectar()
+        configuracion = mongo_handler.buscar_documentos('ens', {'COMPOSE_PROJECT_NAME': name})
+        mongo_handler.cerrar_conexion()
+        return {'status': 'success', 'configuracion': configuracion}
+    except Exception as e:
+        return {'status': 'error', 'message': f'Error al obtener configuracion: {e}'}

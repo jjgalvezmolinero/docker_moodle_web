@@ -14,3 +14,7 @@ def list():
     response = MC.listar_configuraciones()
     return jsonify(response)
 
+@moodle_config.route('/get/<name>', methods=['GET'])
+def get(name):
+    response = MC.get_moodle_config(name)
+    return jsonify(response)
